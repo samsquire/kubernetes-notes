@@ -65,7 +65,15 @@ For local testing of scheduling pods on master node: You're really not meant to 
 kubectl taint nodes $(hostname) node-role.kubernetes.io/master:NoSchedule-
 ```
 
+# Deploy nginx
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/website/master/content/en/examples/controllers/nginx-deployment.yaml
+```
+
 # Install Nginx ingress controller
+
+To load balance nginxes:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
