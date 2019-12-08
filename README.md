@@ -65,3 +65,70 @@ For local testing of scheduling pods on master node: You're really not meant to 
 kubectl taint nodes $(hostname) node-role.kubernetes.io/master:NoSchedule-
 ```
 
+# Install Nginx ingress controller
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+```
+
+```
+kubectl apply -f nginx-service.yml
+```
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+```
+
+Install ingress
+
+```
+kubectl apply -f nginx-ingress.yml
+```
+
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-ubuntu
+  namespace: ingress-nginx
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: ubuntu.sam
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ingress-nginx
+          servicePort: 80
+---
+```
+
+Open up the nginx deployments:
+```
+kubectl expose deployment nginx-deployment --external-ip 10.0.2.15 --type LoadBalancer --port 8081 --target-port 80
+```
