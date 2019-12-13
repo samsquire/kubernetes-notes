@@ -140,3 +140,11 @@ Open up the nginx deployments:
 ```
 kubectl expose deployment nginx-deployment --external-ip 10.0.2.15 --type LoadBalancer --port 8081 --target-port 80
 ```
+
+# Help my docker containers have disappeared after a restart
+
+Try turning swap off again if you haven't done it permanently.
+
+```
+sudo swapoff -a
+```
