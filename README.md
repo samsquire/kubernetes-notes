@@ -141,6 +141,53 @@ Open up the nginx deployments:
 kubectl expose deployment nginx-deployment --external-ip 10.0.2.15 --type LoadBalancer --port 8081 --target-port 80
 ```
 
+# Configure haproxy ingress
+
+```
+kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/master/deploy/haproxy-ingress.yaml
+```
+
+Service
+```
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+  name: web
+  annotations:
+    haproxy.org/load-balance: "leastconn"
+    haproxy.org/pod-maxconn: "50"
+spec:
+  selector:
+    app: nginx
+  ports:
+  - name: port-1
+    port: 9092
+    protocol: TCP
+    targetPort: 80
+```
+
+Ingress
+
+```
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: default
+spec:
+  rules:
+  - host: ubuntu.sam
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web
+          servicePort: 80   
+```
+
+
 # Help my docker containers have disappeared after a restart
 
 Try turning swap off again if you haven't done it permanently.
