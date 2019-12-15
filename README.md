@@ -195,3 +195,13 @@ Try turning swap off again if you haven't done it permanently.
 ```
 sudo swapoff -a
 ```
+
+# Remember to hold back your versions of kubectl
+
+https://stackoverflow.com/questions/59291108/worker-start-to-fail-csinodeifo-error-updating-csinode-annotation
+
+```
+sudo apt-mark hold kubelet kubeadm kubectl
+```
+
+https://github.com/kubernetes/kubernetes/issues/86094
