@@ -46,9 +46,10 @@ kubeadm init --apiserver-advertise-address ${MASTER_IP}
 Local configuration of Kubectl:
 
 ```
-cp /etc/kubernetes/admin.conf $HOME/
-chown $(id -u):$(id -g) $HOME/admin.conf
-export KUBECONFIG=$HOME/admin.conf
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 ```
 
 # Setting up networking
