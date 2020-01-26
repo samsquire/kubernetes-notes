@@ -208,3 +208,18 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 https://github.com/kubernetes/kubernetes/issues/86094
+
+# Debugging
+
+First get pods of kube-system
+
+```
+kubectl get pods -n kube-system
+```
+
+Then get logs of each failing service
+
+```
+kubectl logs kube-controller-manager-ubuntu -n kube-system
+
+```
